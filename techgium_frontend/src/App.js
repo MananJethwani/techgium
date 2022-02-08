@@ -1,30 +1,33 @@
-import React, { useEffect, useState } from 'react';
-import io from 'socket.io-client';
-import Msg from './component/msg';
+import React, { useState } from "react";
+import io from "socket.io-client";
+import Initializer from "./component/Inititalizer";
 
-import './App.css';
+import "./App.css";
 
 function App() {
   const [socket, setSocket] = useState(null);
 
-  useEffect(() => {
+  const createNewSocket = (length, breadth) => {
     const newSocket = io(`http://${window.location.hostname}:8080`);
+    newSocket.emit("start", JSON.stringify([length, breadth]));
     setSocket(newSocket);
-    return () => newSocket.close();
-  }, [setSocket]);
+  };
+
+  const deleteSocket = () => {
+    socket.close();
+    setSocket(null);
+  };
 
   return (
     <div className="App">
-      <header className="app-header">
-        React Chat
-      </header>
-      { socket ? (
-        <div className="chat-container">
-          <Msg socket = {socket}/>
-        </div>
-      ) : (
-        <div>Not Connected</div>
-      )}
+      <header className="app-header">React Chat</header>
+      <div className="chat-container">
+        <Initializer
+          socket={socket}
+          createNewSocket={createNewSocket}
+          deleteSocket={deleteSocket}
+        />
+      </div>
     </div>
   );
 }
