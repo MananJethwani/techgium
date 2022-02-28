@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
+import parse from 'html-react-parser'
+// import navigation as img from ../
 
 function Initializer({ socket, createNewSocket, deleteSocket }) {
   const [length, setLength] = useState("");
@@ -27,6 +29,25 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
     socket.close();
     deleteSocket();
   };
+
+  const quadGen = () => {
+    let ret = '';
+    for(let i = 0;i<8;i++) {
+      let cls = '';
+      console.log(frame[`${String.fromCharCode(97 + i)}1`]);
+      if (frame[`${String.fromCharCode(97 + i)}1`] === 2) {
+        cls = "sector-red";
+      } else if (frame[`${String.fromCharCode(97 + i)}1`] === 1) {
+        cls = "sector-yellow";
+      }
+      ret += 
+      `<li ${cls === '' ? '' : `className="${cls}"`}>
+        <div></div>
+      </li>`;
+    }
+    console.log(ret);
+    return ret;
+  }
 
   return (
     <div className="message-list">
@@ -105,35 +126,13 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
                 <div className="crane-comp">
                   <div>
                     <ul className="crane-circle">
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
+                      {
+                        parse(quadGen())
+                      }
                     </ul>
                   </div>
                   <div className="crane-square"></div>
                 </div>
-
                 <div className="arrow-circle">
                   <div className="crane-comp crane-direction">
                     <div>
@@ -165,10 +164,12 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
                       </ul>
                     </div>
                     <div className="crane-square crane-arrow">
-                      {/* <img src="./bx_bxs-navigation.png" alt=""> */}
+                      <img src="../../public/bx_bxs-navigation.png" alt="" />
                     </div>
                   </div>
-                  <div className="go-text">GO</div>
+                  <div className="go-text" onClick={stop}>
+                    STOP
+                  </div>
                 </div>
               </div>
 

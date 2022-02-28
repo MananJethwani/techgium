@@ -1,4 +1,3 @@
-
 from flask import Flask 
 from flask_socketio import SocketIO, send
 from setInterval import setInterval
