@@ -37,14 +37,7 @@ def data_emitter(dimensions):
         "f1": random.randint(0, 2),
         "g1": random.randint(0, 2),
         "h1": random.randint(0, 2),
-        "a2": random.randint(0, 2),
-        "b2": random.randint(0, 2),
-        "c2": random.randint(0, 2),
-        "d2": random.randint(0, 2),
-        "e2": random.randint(0, 2),
-        "f2": random.randint(0, 2),
-        "g2": random.randint(0, 2),
-        "h2": random.randint(0, 2),
+        "quad": random.randint(0, 7),  # quadrant from 0 to 7
         "building_height": random.uniform(0, 100), # 0-100 in meter
         "active_height": random.uniform(1, 100),   #1-100 in meter
         "speed":random.uniform(0, 50),              #0-50 in cm/sec

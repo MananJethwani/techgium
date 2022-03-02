@@ -9,7 +9,7 @@ app.config['SECRET_KEY'] = 'mysecret'
 socketio = SocketIO(app, cors_allowed_origins='*')
 
 args = [socketio]
-interval = setInterval(emitter, 0.5, args, False)
+interval = setInterval(emitter, 2, args, False)
 
 @socketio.on('start')
 def handleStart(message):
