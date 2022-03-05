@@ -1,9 +1,10 @@
 import React, { Component, useEffect, useState } from "react";
 import navicon from '../images/bx_bxs-navigation.png';
 import parse from 'html-react-parser'
+import rosnodejs from 'rosnodejs'
 // import navigation as img from ../
 
-function Initializer({ socket, createNewSocket, deleteSocket }) {
+function Initializer({ ros, startRos }) {
   const [length, setLength] = useState("");
   const [breadth, setBreadth] = useState("");
   const [frame, setFrame] = useState({});
@@ -16,34 +17,31 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
     setFrame(key_val["data"]);
   };
 
-  useEffect(() => {
-    if (socket != null) {
-      socket.on("data", messageListener);
-    }
-  }, [socket])
+  // useEffect(() => {
+  //   if (ros.isShutdown != null) {
+  //     // socket.on("data", messageListener);
+  //   }
+  // }, [ros])
 
-  useEffect(() => {
-    setGstyle({
-      height: `${(frame.building_height / 200) * 480}px`,
-    });
-    setLGstyle({
-      height: `${(frame.active_height / 200) * 480}px`,
-    });
-    setArrowStyle({
-      transform: `rotate(${frame.quad*45-45}deg)`
-    })
-  }, [frame]);
+  // useEffect(() => {
+  //   setGstyle({
+  //     height: `${(frame.building_height / 200) * 480}px`,
+  //   });
+  //   setLGstyle({
+  //     height: `${(frame.active_height / 200) * 480}px`,
+  //   });
+  //   setArrowStyle({
+  //     transform: `rotate(${frame.quad*45-45}deg)`
+  //   })
+  // }, [frame]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    createNewSocket(Number(length), Number(breadth));
+    startRos(Number(length), Number(breadth));
   };
 
   const stop = (event) => {
     event.preventDefault();
-    socket.emit("stop", "stopping");
-    socket.close();
-    deleteSocket();
   };
 
   const quadGen = () => {
@@ -82,7 +80,7 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
 
   return (
     <div className="message-list">
-      {socket == null ? (
+      {ros == null && 1===2 ? (
         <form onSubmit={handleSubmit} className="parameters-form">
           <label>
             Enter Length:

@@ -2,6 +2,7 @@ from flask import Flask
 from flask_socketio import SocketIO, send
 from setInterval import setInterval
 from ros_wrapper import emitter
+import rospy
 import json
 
 app = Flask(__name__)
@@ -23,4 +24,5 @@ def handleStop(message):
 
 
 if __name__ == '__main__':
-	socketio.run(app)
+    # rospy.init_node("laser_scan_crane")
+    socketio.run(app)
