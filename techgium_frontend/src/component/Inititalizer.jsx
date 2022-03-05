@@ -143,7 +143,7 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
                   <hr />
                   <div className="para-values">
                     <div>
-                      {frame.speed && frame.speed.toFixed(2)}{" "}
+                      <div>{frame.speed && frame.speed.toFixed(2)} </div>
                       <div className="para-unit">cm/s</div>
                     </div>
                     <div>

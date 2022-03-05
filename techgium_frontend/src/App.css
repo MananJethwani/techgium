@@ -253,9 +253,9 @@ li:nth-child(8) {
 }
 .green-bar div, .light-green-bar div{
   position: absolute;
-  left: -80px;
+  left: -90px;
   border-top: 1.6px solid #00000077;
-  width: 70px;
+  width: 80px;
   font-size: 18px;
   font-weight: bold;
   background-color: #fff;
@@ -301,7 +301,7 @@ min-width: 500px;
   font-weight: 800;
 }
 .para-values > div:nth-child(2){
-  margin-left: -20px;
+  margin-left: -30px;
 }
 @keyframes opacity{
   0%{
@@ -311,7 +311,7 @@ min-width: 500px;
     opacity: 1;
   }
 }
-.para-values div #text{
+.para-values div > div:first-child{
   transition: all 1s ease-in;
   animation: opacity 2s ease-out forwards;
 }
@@ -332,9 +332,6 @@ aside{
   display: flex;
   justify-content: center;
   align-items: center;
-}
-.mid-panel{
-
 }
 .video{
   display: flex;
