@@ -1,24 +1,32 @@
 import React, { useState } from "react";
+import io from "socket.io-client";
 import Initializer from "./component/Inititalizer";
-import rosnodejs from "rosnodejs"
-
+import axios from 'axios';
 import "./App.css";
 import "./fontawesome.min.css"
 
 function App() {
-  const [ros, setRos] = useState(null);
+  const [socket, setSocket] = useState(null);
 
-  const startRos = async (length, breadth) => {
-    await rosnodejs.initNode('my_node');
-    const pub = rosnodejs.nh.advertise('/backend', 'std_msgs/string');
-    pub.publish({ data: JSON.stringify({ length, breadth })});
-    setRos(rosnodejs);
-  }
+  const createNewSocket = (length, breadth) => {
+    const newSocket = io(`http://${window.location.hostname}:3000`, { transports : ['websocket'] });
+    axios.post('http://localhost:3000/', {length, breadth});
+    setSocket(newSocket);
+  };
+
+  const deleteSocket = () => {
+    axios.get('http://localhost:3000/stop');
+    setSocket(null);
+  };
 
   return (
     <div className="App">
       <div className="chat-container">
-        <Initializer ros={ros} startRos={startRos}/>
+        <Initializer
+          socket={socket}
+          createNewSocket={createNewSocket}
+          deleteSocket={deleteSocket}
+        />
       </div>
     </div>
   );
