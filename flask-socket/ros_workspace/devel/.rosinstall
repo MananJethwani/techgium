@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/ayush/techgium/flask-socket/ros_workspace/devel/setup.sh

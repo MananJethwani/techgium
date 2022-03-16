@@ -1,20 +1,39 @@
-import React, { useEffect, useState } from "react";
+import React, { Component, useEffect, useState } from "react";
+import navicon from '../images/bx_bxs-navigation.png';
+import parse from 'html-react-parser'
+// import navigation as img from ../
 
 function Initializer({ socket, createNewSocket, deleteSocket }) {
   const [length, setLength] = useState("");
   const [breadth, setBreadth] = useState("");
   const [frame, setFrame] = useState({});
+  const [gstyle, setGstyle] = useState({});
+  const [lgstyle, setLGstyle] = useState({});
+  const [arrowStyle, setArrowStyle] = useState({});
+
+  const messageListener = (message) => {
+    console.log(message);
+    // const key_val = JSON.parse(message);
+    // setFrame(key_val["data"]);
+  };
 
   useEffect(() => {
-    const messageListener = (message) => {
-      const key_val = JSON.parse(message);
-      setFrame(key_val["data"]);
-      console.log(key_val["data"]);
-    };
     if (socket != null) {
       socket.on("data", messageListener);
     }
-  }, [socket]);
+  }, [socket])
+
+  useEffect(() => {
+    setGstyle({
+      height: `${(frame.building_height / 200) * 480}px`,
+    });
+    setLGstyle({
+      height: `${(frame.active_height / 200) * 480}px`,
+    });
+    setArrowStyle({
+      transform: `rotate(${frame.quad*45-45}deg)`
+    })
+  }, [frame]);
 
   const handleSubmit = (event) => {
     event.preventDefault();
@@ -28,10 +47,44 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
     deleteSocket();
   };
 
+  const quadGen = () => {
+    let ret = '';
+    for(let i = 0;i<8;i++) {
+      let cls = '';
+      console.log(frame[`${String.fromCharCode(97 + i)}1`]);
+      if (frame[`${String.fromCharCode(97 + i)}1`] === 2) {
+        cls = "sector-red";
+      } else if (frame[`${String.fromCharCode(97 + i)}1`] === 1) {
+        cls = "sector-yellow";
+      }
+      ret += 
+      `<li ${cls === '' ? '' : `className="${cls}"`}>
+        <div></div>
+      </li>`;
+    }
+    return ret;
+  }
+
+  const ArrowGen = () => {
+    let ret = ``;
+    console.log(frame.quad);
+    for(let i=0;i<8;i++) {
+      if (i === (8+frame.quad-1)%8) {
+        ret += `<li style="background: #11AF11"><div></div></li>`;
+      } else {
+        ret += `<li>
+        <div></div>
+      </li>`;
+      }
+    }
+    console.log(ret);
+    return ret;
+  }
+
   return (
     <div className="message-list">
       {socket == null ? (
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} className="parameters-form">
           <label>
             Enter Length:
             <input
@@ -91,10 +144,12 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
                   <hr />
                   <div className="para-values">
                     <div>
-                      {frame.speed} <div className="para-unit">cm/s</div>
+                      <div>{frame.speed && frame.speed.toFixed(2)} </div>
+                      <div className="para-unit">cm/s</div>
                     </div>
                     <div>
-                      {frame.distance} <div className="para-unit">M</div>
+                      {frame.distance && frame.distance.toFixed(2)}{" "}
+                      <div className="para-unit">M</div>
                     </div>
                     <div>
                       {frame.iteration} <div className="para-unit">cycles</div>
@@ -104,79 +159,40 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
                 </div>
                 <div className="crane-comp">
                   <div>
-                    <ul className="crane-circle">
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                      <li>
-                        <div></div>
-                      </li>
-                    </ul>
+                    <ul className="crane-circle">{parse(quadGen())}</ul>
                   </div>
                   <div className="crane-square"></div>
                 </div>
-
                 <div className="arrow-circle">
                   <div className="crane-comp crane-direction">
                     <div>
-                      <ul className="crane-circle">
-                        <li>
-                          <div></div>
-                        </li>
-                        <li>
-                          <div></div>
-                        </li>
-                        <li>
-                          <div></div>
-                        </li>
-                        <li>
-                          <div></div>
-                        </li>
-                        <li>
-                          <div></div>
-                        </li>
-                        <li>
-                          <div></div>
-                        </li>
-                        <li>
-                          <div></div>
-                        </li>
-                        <li>
-                          <div></div>
-                        </li>
-                      </ul>
+                      <ul className="crane-circle">{parse(ArrowGen())}</ul>
                     </div>
                     <div className="crane-square crane-arrow">
-                      {/* <img src="./bx_bxs-navigation.png" alt=""> */}
+                      <img src={navicon} alt="navicon" style={arrowStyle} />
                     </div>
                   </div>
-                  <div className="go-text">GO</div>
+                  <div className="go-text" onClick={stop}>
+                    STOP
+                  </div>
                 </div>
               </div>
 
               <div className="app-sidebar">
                 <div className="height-loader">
                   <div className="grey-bar"></div>
-                  <div className="green-bar"></div>
-                  <div className="light-green-bar"></div>
+                  <div className="green-bar" style={gstyle}>
+                    <div>
+                      {frame.building_height &&
+                        frame.building_height.toFixed(2)}
+                      m
+                    </div>
+                  </div>
+                  <div className="light-green-bar" style={lgstyle}>
+                    <div>
+                      {frame.active_height && frame.active_height.toFixed(2)}m
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -303,7 +319,6 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
               </div>
             </div>
           </section>
-          <button onClick={stop}>Stop</button>
         </div>
       )}
     </div>
