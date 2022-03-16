@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import io from "socket.io-client";
 import Initializer from "./component/Inititalizer";
+import $ from "jquery";
 
 import "./App.css";
 import "./fontawesome.min.css"
@@ -17,8 +18,18 @@ function App() {
   const deleteSocket = () => {
     setSocket(null);
   };
+  $("input").on("focusin", function () {
+    $(this).parent().find("label").addClass("active");
+  });
+
+  $("input").on("focusout", function () {
+    if (!this.value) {
+      $(this).parent().find("label").removeClass("active");
+    }
+  });
 
   return (
+
     <div className="App">
       <div className="chat-container">
         <Initializer
