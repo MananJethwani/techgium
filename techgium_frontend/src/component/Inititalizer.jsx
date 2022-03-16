@@ -15,8 +15,9 @@ function Initializer({ socket, createNewSocket, deleteSocket }) {
   const [arrowStyle, setArrowStyle] = useState({});
 
   const messageListener = (message) => {
-    const key_val = JSON.parse(message);
-    setFrame(key_val["data"]);
+    console.log(message);
+    // const key_val = JSON.parse(message);
+    // setFrame(key_val["data"]);
   };
 
   useEffect(() => {
